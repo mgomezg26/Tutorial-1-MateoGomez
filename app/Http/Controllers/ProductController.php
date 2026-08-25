@@ -9,14 +9,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request; 
 
 use Illuminate\View\View; 
-
+use App\Models\Product;
  
 
 class ProductController extends Controller 
 
 { 
 
-    public static $products = [ 
+  /*   public static $products = [ 
 
         ["id"=>"1", "name"=>"TV", "description"=>"Best TV"], 
 
@@ -26,7 +26,7 @@ class ProductController extends Controller
 
         ["id"=>"4", "name"=>"Glasses", "description"=>"Best Glasses"] 
 
-    ]; 
+    ];  */
 
  
 
@@ -40,7 +40,7 @@ class ProductController extends Controller
 
         $viewData["subtitle"] =  "List of products"; 
 
-        $viewData["products"] = ProductController::$products; 
+        $viewData["products"] = Product::all(); 
 
         return view('product.index')->with("viewData", $viewData); 
 
@@ -54,7 +54,7 @@ class ProductController extends Controller
 
         $viewData = []; 
 
-        $product = ProductController::$products[$id-1]; 
+        $product = Product::findOrFail($id); 
 
         $viewData["title"] = $product["name"]." - Online Store"; 
 
@@ -85,7 +85,7 @@ class ProductController extends Controller
 
  
 
-    public function save(Request $request) 
+    public function save(Request $request): \Illuminate\Http\RedirectResponse
 
     { 
 
@@ -97,10 +97,12 @@ class ProductController extends Controller
 
         ]); 
 
-        dd($request->all()); 
+       /*  dd($request->all()); 
 
-        //here will be the code to call the model and save it to the database 
-
+        //here will be the code to call the model and save it to the database  */
+        Product::create($request->only(["name","price"])); 
+        
+        return back(); 
     } 
 
 } 
